@@ -1,0 +1,31 @@
+- name: Ensure docke volume mapping host directories exist
+  file:
+    state: directory
+    path: "{{ item | regex_replace('^(?P<host>.+):(?P<container>.+)(:(?P<mode>.+))?', '\\g<host>') }}"
+  with_items:
+    - "{{ docker_influxdb_directory_volumes + docker_influxdb_default_directory_volumes }}"
+
+- name: Ensure docker volume mapping host file directories exist
+  file:
+    state: directory
+    path: "{{ item | regex_replace('^(?P<host>.+):(?P<container>.+)(:(?P<mode>.+))?', '\\g<host>') | dirname }}"
+  with_items:
+    - "{{ docker_influxdb_file_volumes }}"
+
+- name: Remove existing {{ docker_influxdb_name }} container
+  docker_container:
+    name: "{{ docker_influxdb_name }}"
+    state: absent
+  when: docker_influxdb_remove_existing_container
+
+- name: Run docker influxdb container
+  docker_container:
+    name: "{{ docker_influxdb_name }}"
+    image: "{{ docker_influxdb_image }}"
+    pull: "{{ docker_influxdb_pull_image }}"
+    restart_policy: always
+    ports: "{{ docker_influxdb_ports }}"
+    env: "{{ docker_influxdb_env }}"
+    volumes: "{{ docker_influxdb_volumes }}"
+    log_driver: "{{ docker_influxdb_log_driver }}"
+    log_opt: "{{ docker_influxdb_log_options }}"

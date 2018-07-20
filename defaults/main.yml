@@ -1,0 +1,20 @@
+---
+
+docker_influxdb_name: influxdb
+docker_influxdb_image: influxdb:latest
+docker_influxdb_remove_existing_container: yes
+docker_influxdb_data_dir: "/opt/{{ docker_influxdb_name }}/data/"
+
+docker_influxdb_pull_image: yes
+docker_influxdb_ports:
+  - 8086:8086
+docker_influxdb_directory_volumes: []
+docker_influxdb_default_directory_volumes:
+  - "{{ docker_influxdb_data_dir }}:/var/lib/influxdb"
+docker_influxdb_file_volumes: []
+docker_influxdb_volumes: "{{ docker_influxdb_directory_volumes + docker_influxdb_file_volumes + docker_influxdb_default_directory_volumes }}"
+docker_influxdb_network_mode:
+docker_influxdb_networks: []
+docker_influxdb_env:
+docker_influxdb_log_driver: json-file
+docker_influxdb_log_options:
