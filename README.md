@@ -27,11 +27,11 @@ Example Playbook
 ----------------
 
 ```yaml
-- hosts: {{ hosts }}
+- hosts: all
   become: yes
   become_method: sudo
   roles:
-    - role: docker-influxdb
+    - role: levonet.docker_influxdb
       docker_influxdb_env:
         INFLUXDB_HTTP_LOG_ENABLED: "false"
         INFLUXDB_GRAPHITE_ENABLED: "true"
